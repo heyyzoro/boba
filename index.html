@@ -106,7 +106,7 @@
     </div>
 
     <div id="respond" class="hidden">
-      <h3>Grievances from <span id="otherUserResp"></span></h3>
+      <h3>Grievances from others</h3>
       <div id="grievanceList"></div>
     </div>
 
@@ -139,12 +139,15 @@
     function login() {
       const u = document.getElementById("username").value;
       const p = document.getElementById("password").value;
-      if ((u === "kezz" && p === "kezzisgay") || (u === "aish" && p === "aishisgay")) {
+      if (
+        (u === "kezz" && p === "kezzisgay") ||
+        (u === "aish" && p === "aishisgay") ||
+        (u === "chrisane" && p === "chrisaneisgay")
+      ) {
         user = u;
         document.getElementById("loginPage").classList.add("hidden");
         document.getElementById("mainPage").classList.remove("hidden");
         document.getElementById("welcome").innerText = `hey ${user}`;
-        document.getElementById("otherUserResp").innerText = user === "kezz" ? "aish" : "kezz";
         loadGrievances();
         loadResponses();
       } else {
@@ -178,13 +181,12 @@
       const list = document.getElementById("grievanceList");
       list.innerHTML = "";
       const grieves = JSON.parse(localStorage.getItem("grievances") || "[]");
-      const other = user === "kezz" ? "aish" : "kezz";
       grieves.forEach((g, i) => {
-        if (g.from === other && !g.response) {
+        if (g.from !== user && !g.response) {
           let div = document.createElement("div");
           div.className = "grievance-block";
           div.innerHTML = `
-            <p>${g.text}</p>
+            <p><b>${g.from}:</b> ${g.text}</p>
             <textarea id="resp_${i}" placeholder="your reply..."></textarea>
             <button onclick="respond(${i})">send response</button>
           `;
